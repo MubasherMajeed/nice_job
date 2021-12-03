@@ -26,7 +26,7 @@ export class TeamService {
     return this.model.find({company_id:null}).populate('user_id').exec();
   }
 
-  getByCompanyId(id:string){
+  getCompanyTeam(id:string){
     //companyTeam (with company id)
     return this.model.find({company_id:id}).populate('user_id').populate('company_id').exec();
   }

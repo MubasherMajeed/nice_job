@@ -43,13 +43,18 @@ export class ContactsController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id:string,@Body() data:any){
+  @UseInterceptors(FileInterceptor("image_name"))
+  async update(@Param('id') id:string,@Body() data:any,@UploadedFile() image:Express.Multer.File){
+    if (image){
+      data.image_name=image.filename;
+      data.image_path=image.path;
+    }
     return this.service.update(id,data);
   }
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
-  delete(@Param('id') id:string,@Req() req)
+  delete(@Param('id') id:string)
   {
     return this.service.delete(id);
   }

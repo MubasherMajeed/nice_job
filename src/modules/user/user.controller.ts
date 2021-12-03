@@ -1,6 +1,18 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UploadedFile, UseInterceptors } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post, Req,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors
+} from "@nestjs/common";
 import { UserService } from "./user.service";
 import { FileInterceptor } from "@nestjs/platform-express";
+import { JwtAuthGuard } from "../../data/utilities/auth/jwt-auth.guard";
 
 @Controller('user')
 export class UserController {
@@ -8,10 +20,13 @@ export class UserController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   fetchAll(){
     return this.service.fetch();
   }
+
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   fetchOne(@Param('id') id:string){
     return this.service.fetch(id);
   }
@@ -22,17 +37,19 @@ export class UserController {
     console.log(image);
     if (image){
       data.image_name=image.filename;
-      console.log(image.filename);
-      data.image_path= image.path;}
+      data.image_path= image.path;
+    }
     return this.service.create(data);
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   update(@Param('id') id:string,@Body() data:any){
     return this.service.update(id,data);
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   delete(@Param('id') id:string)
   {
     return this.service.delete(id);

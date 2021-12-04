@@ -6,7 +6,6 @@ import {
   Param,
   Patch,
   Post,
-  Put,
   Req,
   UnauthorizedException,
   UseGuards
@@ -14,65 +13,87 @@ import {
 import { TeamService } from "./team.service";
 import { JwtAuthGuard } from "../../data/utilities/auth/jwt-auth.guard";
 import { UserRole } from "../../data/schemas/user.schema";
-import { createPrivateKey } from "crypto";
 import { TeamRole } from "../../data/schemas/team.schema";
 
-@Controller('team')
+@Controller("team")
 export class TeamController {
 
-  constructor(private readonly service:TeamService) {
+  constructor(private readonly service: TeamService) {
   }
+
   @Get()
   @UseGuards(JwtAuthGuard)
-  fetchAll(){
-    return this.service.fetch();
+   async fetchAll(@Req() req) {
+    const checkManager = await this.service.findByUserId(req.user._id);
+    if (req.user.role === UserRole.Admin|| checkManager.role === TeamRole.Manager) {
+      return this.service.fetch();
+    }
+    throw new UnauthorizedException();
   }
 
-  @Get('company/:id')
+  @Get("company/:id")
   @UseGuards(JwtAuthGuard)
-  getCompanyTeamByCompanyId(@Param('id') id:string){
-    return this.service.getCompanyTeam(id);
+  async getCompanyTeamByCompanyId(@Param("id") id: string,@Req() req) {
+
+
+    const checkManager = await this.service.findByUserId(req.user._id);
+
+    if (req.user.role === UserRole.Admin|| checkManager.role === TeamRole.Manager) {
+      return this.service.getCompanyTeam(id);
+    }
+    throw new UnauthorizedException();
   }
 
-  @Get('getone/:id')
+  @Get("getone/:id")
   @UseGuards(JwtAuthGuard)
-  fetchOne(@Param('id') id:string){
-    return this.service.fetch(id);
+  async fetchOne(@Param("id") id: string,@Req() req) {
+
+    const checkManager = await this.service.findByUserId(req.user._id);
+
+    if (req.user.role === UserRole.Admin|| checkManager.role === TeamRole.Manager) {
+      return this.service.fetch(id);
+    }
+    throw new UnauthorizedException();
   }
 
-  @Get('accounts_team')
+  @Get("accounts_team")
   @UseGuards(JwtAuthGuard)
-  getAccountsTeam(){
+  getAccountsTeam() {
     return this.service.getAccountTeam();
   }
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  async create(@Body() data : any,@Req() req){
-    const checkManager = await this.service.findByUserId(req.user._id).exec();
+  async create(@Body() data: any, @Req() req) {
+    const checkManager = await this.service.findByUserId(req.user._id);
 
-    if (req.user.role===UserRole.Admin||checkManager.role=== TeamRole.Manager){
+    if (req.user.role === UserRole.Admin || checkManager.role === TeamRole.Manager) {
       return this.service.create(data);
     }
     throw new UnauthorizedException();
   }
 
-  @Patch(':id')
+  @Patch(":id")
   @UseGuards(JwtAuthGuard)
-  async update(@Param('id') id:string,@Body() data:any, @Req() req){
-    const checkManager = await this.service.findByUserId(req.user._id).exec();
+  async update(@Param("id") id: string, @Body() data: any, @Req() req) {
+    const checkManager = await this.service.findByUserId(req.user._id);
 
-    if (req.user.role===UserRole.Admin||checkManager.role=== TeamRole.Manager) {
+    if (req.user.role === UserRole.Admin || checkManager.role === TeamRole.Manager) {
       return this.service.update(id, data);
     }
     throw new UnauthorizedException();
   }
 
-  @Delete(':id')
+  @Delete(":id")
   @UseGuards(JwtAuthGuard)
-  delete(@Param('id') id:string)
-  {
-    return this.service.delete(id);
+  async delete(@Param("id") id: string, @Req() req) {
+
+    const checkManager = await this.service.findByUserId(req.user._id);
+
+    if (req.user.role === UserRole.Admin || checkManager.role === TeamRole.Manager) {
+      return this.service.delete(id);
+    }
+    throw new UnauthorizedException();
   }
 
 

@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 
 export enum UserRole {
-  user,
+  User,
   Admin
 }
 

@@ -26,8 +26,10 @@ export class AppsController {
   @Get()
   @UseGuards(JwtAuthGuard)
   async fetchAll(@Req() req){
-    const teamManager = await this.TeamService.findByUserId(req.user._id).exec();
-    if (teamManager.role===TeamRole.Manager||req.user.role===UserRole.Admin){
+    console.log(req.user.role);
+    // const teamManager = await this.TeamService.findByUserId(req.user._id);
+    // console.log(teamManager);
+    if (req.user.role===UserRole.Admin){
       return this.service.fetch();
     }
     throw new UnauthorizedException();

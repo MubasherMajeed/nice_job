@@ -13,7 +13,7 @@ export class CompanyService {
       return this.model.findById(id).exec();
     }
 
-    return this.model.find().populate('company_id').exec();
+    return this.model.find().exec();
   }
 
   create(data:any){

@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 
-
 export enum MediaTypes {
   Apps,
   SocialMedia,

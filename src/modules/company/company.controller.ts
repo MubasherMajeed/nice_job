@@ -26,7 +26,7 @@ export class CompanyController {
   @Get()
   @UseGuards(JwtAuthGuard)
   async fetchAll(@Req() req) {
-    const teamManager = await this.TeamService.findByUserId(req.user._id).exec();
+    const teamManager = await this.TeamService.findByUserId(req.user._id);
     if (teamManager.role === TeamRole.Manager || req.user.role === UserRole.Admin) {
       return this.service.fetch();
 
@@ -58,7 +58,7 @@ export class CompanyController {
   @Patch(":id")
   async update(@Param("id") id: string, @Body() data: any, @Req() req) {
 
-    const teamManager = await this.TeamService.findByUserId(req.user._id).exec();
+    const teamManager = await this.TeamService.findByUserId(req.user._id);
     if (teamManager.role === TeamRole.Manager || req.user.role === UserRole.Admin) {
       return this.service.update(id, data);
     }

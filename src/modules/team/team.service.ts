@@ -11,7 +11,7 @@ export class TeamService {
   }
 
   findByUserId(id:string){
-    return this.model.findOne({user_id:id});
+    return this.model.findOne({user_id:id}).exec();
   }
 
   async fetch(id?:string){

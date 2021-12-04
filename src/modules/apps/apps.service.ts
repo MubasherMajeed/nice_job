@@ -8,11 +8,12 @@ export class AppsService {
 
   constructor(@InjectModel(Apps.name) private readonly model:Model<AppsDocument>) {
   }
+
+
   fetch(id?:string){
     if (id){
       return this.model.findById(id).exec();
     }
-
     return this.model.find().exec();
   }
 

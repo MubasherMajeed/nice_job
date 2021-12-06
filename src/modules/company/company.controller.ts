@@ -5,31 +5,31 @@ import {
   Get,
   Param,
   Patch,
-  Post, Req, UnauthorizedException,
+  Post,
+  Req,
+  UnauthorizedException,
   UploadedFile,
   UseGuards,
   UseInterceptors
 } from "@nestjs/common";
+import { AuthGuard } from "@nestjs/passport";
 import { CompanyService } from "./company.service";
-import { FileInterceptor } from "@nestjs/platform-express";
-import { JwtAuthGuard } from "../../data/utilities/auth/jwt-auth.guard";
-import { TeamRole } from "../../data/schemas/team.schema";
 import { TeamService } from "../team/team.service";
-import { UserRole } from "../../data/schemas/user.schema";
+import { TeamRole } from "../../data/schemas/team.schema";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { UserRole } from "../../data/schemas/person.schema";
 
 @Controller("company")
 export class CompanyController {
-
   constructor(private readonly service: CompanyService, private readonly TeamService: TeamService) {
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard("jwt"))
   async fetchAll(@Req() req) {
     const teamManager = await this.TeamService.findByUserId(req.user._id);
     if (teamManager.role === TeamRole.Manager || req.user.role === UserRole.Admin) {
       return this.service.fetch();
-
     }
   }
 
@@ -39,10 +39,9 @@ export class CompanyController {
   }
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard("jwt"))
   @UseInterceptors(FileInterceptor("logo_name"))
   async create(@Body() data: any, @Req() req, @UploadedFile() logo: Express.Multer.File) {
-
     if (req.user.role === UserRole.Admin) {
       if (logo) {
         data.logo_name = logo.filename;
@@ -52,7 +51,6 @@ export class CompanyController {
       return this.service.create(data);
     }
     throw new UnauthorizedException();
-
   }
 
   @Patch(":id")
@@ -66,12 +64,11 @@ export class CompanyController {
   }
 
   @Delete(":id")
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard("jwt"))
   delete(@Param("id") id: string, @Req() req) {
     if (req.user.role === UserRole.Admin) {
       return this.service.delete(id);
     }
     throw new UnauthorizedException();
   }
-
 }

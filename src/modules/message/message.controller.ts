@@ -6,20 +6,17 @@ import {
   Patch,
   Post,
   Req,
-  UploadedFile,
   UseGuards,
-  UseInterceptors
 } from "@nestjs/common";
 import { MessageService } from "./message.service";
-import { JwtAuthGuard } from "../../data/utilities/auth/jwt-auth.guard";
-import { FileInterceptor } from "@nestjs/platform-express";
+import { AuthGuard } from "@nestjs/passport";
 
 @Controller('message')
 export class MessageController {
   constructor(private readonly service:MessageService) {
   }
   @Get()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard("jwt"))
   async fetchAll(){
     return this.service.fetch();
   }
@@ -30,7 +27,7 @@ export class MessageController {
   }
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard("jwt"))
   async create(@Body() data : any){
 
     return this.service.create(data);
@@ -42,7 +39,7 @@ export class MessageController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard("jwt"))
   delete(@Param('id') id:string,@Req() req)
   {
     return this.service.delete(id);

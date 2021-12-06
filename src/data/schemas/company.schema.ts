@@ -8,34 +8,46 @@ export enum CompanyRole {
 
 export type CompanyDocument = Company & Document;
 
-@Schema( {timestamps:true})
+@Schema({ timestamps: true })
 export class Company {
   @Prop()
-  name:string;
+  name: string;
+
   @Prop()
-  email:string;
+  email: string;
+
   @Prop()
-  address:string;
+  address: string;
+
   @Prop()
-  unit:string;
+  unit: string;
+
   @Prop()
-  country:string;
+  country: string;
+
   @Prop()
-  state:string;
+  state: string;
+
   @Prop()
-  city:string;
+  city: string;
+
   @Prop()
-  postal_code:number;
+  postal_code: number;
+
   @Prop()
-  website:string;
+  website: string;
+
   @Prop()
-  logo_name:string;
+  logo_name: string;
+
   @Prop()
-  logo_path:string;
+  logo_path: string;
+
   @Prop()
-  sdk_public_key:string;
+  sdk_public_key: string;
+
   @Prop()
-  role:number;
+  role: number;
 }
 
 

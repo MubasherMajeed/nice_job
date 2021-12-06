@@ -7,22 +7,22 @@ export enum CampaignStatus {
 
 export type CampaignDocument = Campaign & Document;
 
-@Schema({timestamps:true})
+@Schema({ timestamps: true })
 export class Campaign {
   @Prop()
-  name:string;
+  name: string;
   @Prop()
-  status:number;
+  status: number;
   @Prop()
-  status_change_time:string;
+  status_change_time: string;
   @Prop()
-  new_review:number;
+  new_review: number;
   @Prop()
-  entered:number;
+  entered: number;
   @Prop()
-  people_enrolled:number;
+  people_enrolled: number;
   @Prop()
-  people_exited:number;
+  people_exited: number;
 
 }
 

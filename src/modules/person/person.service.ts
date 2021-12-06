@@ -1,11 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { User, UserDocument } from "../../data/schemas/user.schema";
+import { Person, PersonDocument } from "../../data/schemas/person.schema";
 import { Model } from "mongoose";
 
 @Injectable()
-export class UserService {
-  constructor(@InjectModel(User.name) private readonly model:Model<UserDocument>) {
+export class PersonService {
+  constructor(@InjectModel(Person.name) private readonly model:Model<PersonDocument>) {
   }
 
   findByEmail(email:string){
@@ -41,4 +41,7 @@ export class UserService {
     return this.model.findByIdAndDelete(id).exec();
   }
 
+  async fetchByUsername(username: string, password: string): Promise<Person> {
+    return await this.model.findOne({ username, password }).exec();
+  }
 }

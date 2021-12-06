@@ -1,6 +1,6 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import * as mongoose from "mongoose";
 import { Company } from "./company.schema";
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 
 export enum ContactsType {
   Customers,
@@ -13,6 +13,7 @@ export enum ContactsReviewStatus {
   Invited,
   Done,
 }
+
 export enum ContactAccountStatus {
   Blocked,
   UnBlocked,
@@ -20,40 +21,54 @@ export enum ContactAccountStatus {
 
 export type ContactsDocument = Contacts & Document;
 
-@Schema({timestamps:true})
+@Schema({ timestamps: true })
 export class Contacts {
   @Prop()
-  name:string;
+  name: string;
+
   @Prop()
-  image_name:string;
+  image_name: string;
+
   @Prop()
-  image_path:string;
+  image_path: string;
+
   @Prop()
-  email:string;
+  email: string;
+
   @Prop()
-  position:string;
+  position: string;
+
   @Prop()
-  type:number;
+  type: number;
+
   @Prop()
-  status:number;
+  status: number;
+
   @Prop()
-  phone:number;
+  phone: number;
+
   @Prop()
-  address:string;
+  address: string;
+
   @Prop()
-  unit:string;
+  unit: string;
+
   @Prop()
-  city:string;
+  city: string;
+
   @Prop()
-  state:string;
+  state: string;
+
   @Prop()
-  zip_code:number;
+  zip_code: number;
+
   @Prop()
-  account_status:number;
-  @Prop({type:mongoose.Schema.Types.ObjectId,ref:Company.name})
-  company_id:string;
+  account_status: number;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Company.name })
+  company_id: string;
 
 
 }
 
-export const ContactsSchema = SchemaFactory.createForClass(Contacts)
+export const ContactsSchema = SchemaFactory.createForClass(Contacts);

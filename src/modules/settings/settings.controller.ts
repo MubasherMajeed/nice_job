@@ -1,39 +1,38 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseGuards } from "@nestjs/common";
+import { AuthGuard } from "@nestjs/passport";
 import { SettingsService } from "./settings.service";
-import { JwtAuthGuard } from "../../data/utilities/auth/jwt-auth.guard";
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from "@nestjs/common";
 
-@Controller('settings')
+@Controller("settings")
 export class SettingsController {
-  constructor(private readonly service:SettingsService) {
+  constructor(private readonly service: SettingsService) {
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
-  async fetchAll(){
+  @UseGuards(AuthGuard("jwt"))
+  async fetchAll() {
     return this.service.fetch();
   }
 
-  @Get(':id')
-  fetchOne(@Param('id') id:string){
+  @Get(":id")
+  fetchOne(@Param("id") id: string) {
     return this.service.fetch(id);
   }
 
   @Post()
-  @UseGuards(JwtAuthGuard)
-  async create(@Body() data : any){
+  @UseGuards(AuthGuard("jwt"))
+  async create(@Body() data: any) {
 
     return this.service.create(data);
   }
 
-  @Patch(':id')
-  async update(@Param('id') id:string,@Body() data:any){
-    return this.service.update(id,data);
+  @Patch(":id")
+  async update(@Param("id") id: string, @Body() data: any) {
+    return this.service.update(id, data);
   }
 
-  @Delete(':id')
-  @UseGuards(JwtAuthGuard)
-  delete(@Param('id') id:string)
-  {
+  @Delete(":id")
+  @UseGuards(AuthGuard("jwt"))
+  delete(@Param("id") id: string) {
     return this.service.delete(id);
   }
 

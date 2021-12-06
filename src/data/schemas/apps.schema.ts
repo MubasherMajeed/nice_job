@@ -8,16 +8,16 @@ export enum MediaTypes {
 
 export type AppsDocument = Apps & Document;
 
-@Schema({timestamps:true})
+@Schema({ timestamps: true })
 export class Apps {
   @Prop()
-  name:string;
+  name: string;
   @Prop()
-  data:string;
+  data: string;
   @Prop()
-  connected:boolean;
+  connected: boolean;
   @Prop()
-  media_type:number;
+  media_type: number;
 }
 
 export const AppsSchema = SchemaFactory.createForClass(Apps);

@@ -10,9 +10,9 @@ import {
   UnauthorizedException,
   UseGuards
 } from "@nestjs/common";
+import { AuthGuard } from "@nestjs/passport";
 import { TeamService } from "./team.service";
-import { JwtAuthGuard } from "../../data/utilities/auth/jwt-auth.guard";
-import { UserRole } from "../../data/schemas/user.schema";
+import { UserRole } from "../../data/schemas/person.schema";
 import { TeamRole } from "../../data/schemas/team.schema";
 
 @Controller("team")
@@ -22,48 +22,49 @@ export class TeamController {
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
-   async fetchAll(@Req() req) {
+  @UseGuards(AuthGuard("jwt"))
+  async fetchAll(@Req() req) {
     const checkManager = await this.service.findByUserId(req.user._id);
-    if (req.user.role === UserRole.Admin|| checkManager.role === TeamRole.Manager) {
+    if (req.user.role === UserRole.Admin || checkManager.role === TeamRole.Manager) {
       return this.service.fetch();
     }
     throw new UnauthorizedException();
   }
 
   @Get("company/:id")
-  @UseGuards(JwtAuthGuard)
-  async getCompanyTeamByCompanyId(@Param("id") id: string,@Req() req) {
+  @UseGuards(AuthGuard("jwt"))
+  async getCompanyTeamByCompanyId(@Param("id") id: string, @Req() req) {
 
 
     const checkManager = await this.service.findByUserId(req.user._id);
 
-    if (req.user.role === UserRole.Admin|| checkManager.role === TeamRole.Manager) {
+    if (req.user.role === UserRole.Admin || checkManager.role === TeamRole.Manager) {
       return this.service.getCompanyTeam(id);
     }
     throw new UnauthorizedException();
   }
 
   @Get("getone/:id")
-  @UseGuards(JwtAuthGuard)
-  async fetchOne(@Param("id") id: string,@Req() req) {
+  @UseGuards(AuthGuard("jwt"))
+  async fetchOne(@Param("id") id: string, @Req() req) {
 
     const checkManager = await this.service.findByUserId(req.user._id);
 
-    if (req.user.role === UserRole.Admin|| checkManager.role === TeamRole.Manager) {
+    if (req.user.role === UserRole.Admin || checkManager.role === TeamRole.Manager) {
       return this.service.fetch(id);
     }
     throw new UnauthorizedException();
   }
 
+  ///TODO: There should be no underscore in all the modules routes: Follow and Read https://restfulapi.net/resource-naming/
   @Get("accounts_team")
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard("jwt"))
   getAccountsTeam() {
     return this.service.getAccountTeam();
   }
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard("jwt"))
   async create(@Body() data: any, @Req() req) {
     const checkManager = await this.service.findByUserId(req.user._id);
 
@@ -74,7 +75,7 @@ export class TeamController {
   }
 
   @Patch(":id")
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard("jwt"))
   async update(@Param("id") id: string, @Body() data: any, @Req() req) {
     const checkManager = await this.service.findByUserId(req.user._id);
 
@@ -85,7 +86,7 @@ export class TeamController {
   }
 
   @Delete(":id")
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard("jwt"))
   async delete(@Param("id") id: string, @Req() req) {
 
     const checkManager = await this.service.findByUserId(req.user._id);

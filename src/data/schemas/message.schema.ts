@@ -16,19 +16,25 @@ export type MessageDocument = Message & Document;
 @Schema()
 export class Message {
   @Prop()
-  html:string;
+  html: string;
+
   @Prop()
-  type:number;
+  type: number;
+
   @Prop()
-  sent:number;
+  sent: number;
+
   @Prop()
-  opened:number;
+  opened: number;
+
   @Prop()
-  clicked:number;
+  clicked: number;
+
   @Prop()
-  goal:number;
+  goal: number;
+
   @Prop()
-  status:number
+  status: number;
 }
 
-export const MessageSchema = SchemaFactory.createForClass(Message)
+export const MessageSchema = SchemaFactory.createForClass(Message);

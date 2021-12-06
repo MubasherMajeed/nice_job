@@ -10,8 +10,8 @@ import {
   UseGuards,
   UseInterceptors
 } from "@nestjs/common";
+import { AuthGuard } from "@nestjs/passport";
 import { ContactsService } from "./contacts.service";
-import { JwtAuthGuard } from "../../data/utilities/auth/jwt-auth.guard";
 import { FileInterceptor } from "@nestjs/platform-express";
 
 @Controller('contacts')
@@ -21,7 +21,7 @@ export class ContactsController {
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard("jwt"))
   async fetchAll(@Req() req){
     return this.service.fetch();
   }
@@ -32,7 +32,7 @@ export class ContactsController {
   }
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard("jwt"))
   @UseInterceptors(FileInterceptor('image_name'))
   async create(@Body() data : any,@UploadedFile() image:Express.Multer.File){
     if (image){
@@ -53,7 +53,7 @@ export class ContactsController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard("jwt"))
   delete(@Param('id') id:string)
   {
     return this.service.delete(id);

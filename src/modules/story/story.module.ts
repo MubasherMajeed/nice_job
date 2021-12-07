@@ -9,7 +9,7 @@ import { Story, StorySchema } from "../../data/schemas/story.schema";
   imports: [MongooseModule.forFeature([{ name: Story.name, schema: StorySchema }]),
     MulterModule.register(
       {
-        dest: "./upload"
+        dest: "../upload"
       }
     )
   ],

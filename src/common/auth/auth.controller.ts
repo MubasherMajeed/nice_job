@@ -3,7 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Person } from '../../data/schemas/person.schema';
 import { Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
 import { AccessTokenResponse, SignInRequest } from '../../data/dtos/auth.dto';
-import { ApiBody, ApiOkResponse, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOkResponse, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -32,6 +32,7 @@ export class AuthController {
   @ApiUnauthorizedResponse({ description: 'Invalid access token' })
   @Get('profile')
   @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('access-token')
   profile(@Request() request): Promise<any> {
     return this.service.profile(request.user);
   }
@@ -40,7 +41,8 @@ export class AuthController {
   @ApiUnauthorizedResponse({ description: 'Invalid access token' })
   @Post('sign-out')
   @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('access-token')
   signOut(@Request() request: any): Promise<any> {
-    return request.logout();
+    return request.logout;
   }
 }

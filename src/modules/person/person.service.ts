@@ -21,7 +21,7 @@ export class PersonService {
 
   async create(data:any){
     const emailCheck= await this.model.findOne({
-      email:data.email
+      username:data.username
     });
     if (emailCheck){
       throw new HttpException(

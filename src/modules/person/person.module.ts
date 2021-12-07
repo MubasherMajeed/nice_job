@@ -9,7 +9,7 @@ import { Person, PersonSchema } from "../../data/schemas/person.schema";
   imports: [MongooseModule.forFeature([{ name: Person.name, schema: PersonSchema }]),
     ///TODO: MulterModule Path should be declared once and used everywhere instead of this.
     MulterModule.register(
-      { dest: "./upload" }
+      { dest: "../upload" }
     )
   ],
   providers: [PersonService],

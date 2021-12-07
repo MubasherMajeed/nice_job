@@ -14,23 +14,20 @@ import { AuthGuard } from "@nestjs/passport";
 import { AppsService } from "./apps.service";
 import { TeamService } from "../team/team.service";
 import { UserRole } from "../../data/schemas/person.schema";
+import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { CreateAppRequest, UpdateAppRequest } from '../../data/dtos/apps.dto';
 
+@ApiTags('Apps')
 @Controller("apps")
 export class AppsController {
   ///TODO: Remove extra services which is not used
-  constructor(private readonly service: AppsService, private readonly TeamService: TeamService) {
+  constructor(private readonly service: AppsService) {
   }
 
   @Get()
-  @UseGuards(AuthGuard("jwt"))
+  // @UseGuards(AuthGuard("jwt"))
   async fetchAll(@Req() req) {
-    console.log(req.user.role);
-    // const teamManager = await this.TeamService.findByUserId(req.person._id);
-    // console.log(teamManager);
-    if (req.user.role === UserRole.Admin) {
       return this.service.fetch();
-    }
-    throw new UnauthorizedException();
   }
 
   @Get(":id")
@@ -39,22 +36,25 @@ export class AppsController {
   }
 
   @Post()
-  @UseGuards(AuthGuard("jwt"))
+  @ApiBody({
+    type:CreateAppRequest
+  })
+  // @UseGuards(AuthGuard("jwt"))
   async create(@Body() data: any) {
     return this.service.create(data);
   }
 
   @Patch(":id")
+  @ApiBody({
+    type:UpdateAppRequest
+  })
   async update(@Param("id") id: string, @Body() data: any) {
     return this.service.update(id, data);
   }
 
   @Delete(":id")
-  @UseGuards(AuthGuard("jwt"))
-  delete(@Param("id") id: string, @Req() req) {
-    if (req.user.role === UserRole.Admin) {
+  // @UseGuards(AuthGuard("jwt"))
+  delete(@Param("id") id: string) {
       return this.service.delete(id);
-    }
-    throw new UnauthorizedException();
   }
 }

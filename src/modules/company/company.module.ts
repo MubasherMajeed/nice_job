@@ -10,7 +10,7 @@ import { Company, CompanySchema } from "../../data/schemas/company.schema";
   imports: [MongooseModule.forFeature([{ name: Company.name, schema: CompanySchema }]),
     MulterModule.register(
       {
-        dest: "./upload"
+        dest: "../upload"
       }
     ), TeamModule
   ],
